@@ -227,6 +227,17 @@
             100% { transform: rotate(360deg); }
         }
 
+        .error-banner {
+            display: none;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+
     </style>
 </head>
 <body>
@@ -252,6 +263,8 @@
 
         <div class="loader" id="loader"></div>
 
+        <div class="error-banner" id="error-banner"></div>
+
         <div class="result-card" id="result-card">
             <img src="" id="preview" class="preview-img" alt="Uploaded Preview">
             <div>
@@ -267,6 +280,7 @@
         const dropZone = document.getElementById('drop-zone');
         const loader = document.getElementById('loader');
         const resultCard = document.getElementById('result-card');
+        const errorBanner = document.getElementById('error-banner');
         const submitBtn = document.getElementById('submit-btn');
 
         // Drag and Drop Effects
@@ -316,6 +330,7 @@
             submitBtn.disabled = true;
             loader.style.display = 'block';
             resultCard.style.display = 'none';
+            errorBanner.style.display = 'none';
 
             try {
                 const response = await fetch('/predict', {
@@ -338,10 +353,12 @@
 
                     resultCard.style.display = 'block';
                 } else {
-                    alert(data.error || 'An error occurred');
+                    errorBanner.textContent = data.error || 'An unexpected error occurred.';
+                    errorBanner.style.display = 'block';
                 }
             } catch(err) {
-                alert('Server error occurred');
+                errorBanner.textContent = 'Server connection failed. Please ensure the backend is running.';
+                errorBanner.style.display = 'block';
             } finally {
                 submitBtn.disabled = false;
                 loader.style.display = 'none';
