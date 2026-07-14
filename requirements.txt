@@ -1,3 +1,5 @@
 tensorflow>=2.0.0
 numpy
 Pillow
+Flask
+Werkzeug
